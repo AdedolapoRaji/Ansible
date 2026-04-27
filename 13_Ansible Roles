@@ -1,0 +1,126 @@
+ Used to divide playbooks into directory structure 
+ we can organize the playbook
+Reduce the playbook length 
+
+CREATING ROLE 1 (TO PERFORM TASK 1) 
+
+mkdir playbooks
+
+ cd playbooks
+
+ yum install tree -y
+ 
+ mkdir -p roles/one/tasks
+
+ vim roles/one/tasks/main.yml
+
+
+- name: installing httpd
+  yum:                  # Aligned vertically with 'name'
+    name: httpd
+    state: present
+
+
+ vim master.yml
+
+- hosts: all
+  roles:
+    - one
+
+
+# tree
+.
+├── master.yml
+└── roles
+    └── one
+        └── tasks
+            └── main.yml
+
+
+
+ cat master.yml
+
+ cat roles/one/tasks/main.yml
+
+ansible-playbook master.yml -b
+
+
+
+
+
+CREATING ROLE TWO  (To perform task 2)
+
+
+ mkdir -p roles/two/tasks
+
+ vim roles/two/tasks/main.yml
+
+ tree
+
+
+.
+├── master.yml
+└── roles
+    ├── one
+    │   └── tasks
+    │       └── main.yml
+    └── two
+        └── tasks
+            └── main.yml
+
+
+
+ vim master.yml 
+
+Add -two
+
+- hosts: all
+  roles:
+    - one
+    - two
+
+
+
+
+
+
+ansible-playbook master.yml -b
+
+
+
+TO REMOVE PACKAGES and USERS
+
+All files are located in folder "playbooks" 
+
+Run:
+
+tree
+
+
+
+ cd playbooks 
+
+sed -i 's/present/absent/g' roles/one/tasks/main.yml
+
+ cat roles/one/tasks/main.yml
+
+ansible-playbook master.yml -b
+
+
+To remove user task 2
+
+sed -i 's/present/absent/g' roles/two/tasks/main.yml
+
+ cat roles/two/tasks/main.yml
+
+
+ansible-playbook master.yml -b
+
+
+
+
+To remove the entire folder 
+
+ rm -r playbooks
+
+Keep pressing y
