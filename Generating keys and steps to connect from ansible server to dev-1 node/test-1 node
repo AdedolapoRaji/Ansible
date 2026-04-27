@@ -1,0 +1,15 @@
+	4. 
+
+Ssh-keygen
+Enter key four times 
+
+
+Connecting to dev-1 from ansible server 
+
+ssh -i ~/devops-key.pem ec2-user@172.31.25.125
+
+ sudo -i  (to go back to root )
+
+root@dev
+
+Ctrl d twice (to go back to root@ansible)
