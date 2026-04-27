@@ -1,0 +1,54 @@
+COMMENT
+
+# ----- single line commenting
+
+/* and */   ---multiple line comment 
+
+
+
+DRY RUN 
+
+
+SHOWS WHAT HAPPENS WHEN PLAYBOOK IS EXECUTED without executing the actual playbook 
+
+syntax
+
+ ansible-playbook playbook1.yml --check 
+
+
+PIP
+
+It is a package manager used to install python libraries 
+
+Example: numPy and pandas are samples of python libraries to be installed using "pip" module
+
+Pip must first be installed using in the machine using "yum"
+
+
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: install pip
+      yum:
+        name: pip
+        state: present
+
+    - name: installing NumPy
+      pip:
+        name: NumPy
+        state: present
+
+
+ ansible-playbook playbook1.yml
+
+To remove 
+
+sed -i 's/present/absent/g' playbook1.yml
+
+To check 
+
+ ansible all -a "pip --version" -b
+
+ ansible all -a "NumPy --version" -b
+
