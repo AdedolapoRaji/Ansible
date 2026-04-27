@@ -1,0 +1,41 @@
+It means one task is depending on another task 
+
+To install and start apache 
+
+
+
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: install apache web server
+      yum:
+        name: httpd
+        state: present
+
+    - name: ensure apache is started
+      service:
+        name: httpd
+        state: started
+
+
+
+ ansible-playbook playbook1.yml
+
+To check status 
+
+ansible all -a "systemctl status httpd"
+
+To stop the service 
+
+ansible all -m service -a "name=httpd state=stopped" -b
+
+To uninstall 
+
+ansible all -m yum -a "name=httpd state=absent" -b
+
+To uninstall using sed command 
+
+ sed -i 's/present/absent/g' playbook1.yml
+
+Cat playbook1.yml
