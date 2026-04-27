@@ -1,0 +1,53 @@
+ADHOC COMMANDS 
+
+ansible all -a "yum install git -y" -b  (To install git on both the dev and test server)
+
+ansible dev -a "yum install maven -y" -b (To install maven on the dev server)
+
+ ansible all -a "touch file1" -b ( to create file1 in all nodes)
+
+ ansible all -a "ls" -b
+
+ansible all -a "yum install httpd -y" -b (To install apache)
+
+ansible all -a "systemctl restart httpd -y" -b
+
+ansible all -a "systemctl status httpd -y" -b
+
+ansible all -a "useradd raham" -b ( to create user)
+
+ansible all -a "cat /etc/passwd" -b  (To see the list of users)
+
+ ansible all --list-hosts (To list all worker nodes)
+
+
+ ansible dev --list-hosts (To list only dev nodes)
+
+ ansible dev --list-hosts (To list only dev nodes)
+
+ansible test --list-hosts (To list only test nodes)
+
+Ansible all[-1] --list-hosts  (To show the last nodes)
+
+
+
+ansible all -a "git --version" -b   
+
+ansible all -a "yum remove git* -y" -b  ( to uninstall package)
+
+
+
+To remove 
+
+
+  ansible all -a "whereis httpd"
+ 
+ansible all -a "pkill -9 httpd" -b
+
+ansible all -a "rpm -qa | grep httpd" -b
+
+
+ ansible all -a "yum remove httpd* mod_http2 mod_lua -y" -b
+
+
+ansible all -a "httpd -v"
