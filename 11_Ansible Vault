@@ -1,0 +1,23 @@
+TO ENCRYPT DATA AND FILE
+
+
+
+	1. ansible-vault create creds.txt 
+
+Set password 
+
+Paste text
+
+Save 
+
+ cat creds.txt ( to view the encrypted file)
+
+	2.  ansible-vault edit creds.txt  (To edit file encryted)
+	3.  ansible-vault rekey creds.txt (To change vault password)
+	4.  ansible-vault decrypt creds.txt ( To decrypt data)
+cat creds.txt (to view unencrypted file)
+	5. ansible-vault encrypt creds.txt (to encrypt)
+	6. ansible-vault view creds.txt (To view plain txt without decrypting)
+
+
+
