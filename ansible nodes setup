@@ -1,0 +1,28 @@
+1.
+
+Create 3 servers (1=1 ansible, 2=dev-1 , 3=test-1)
+
+sudo -I
+
+ hostnamectl set-hostname ansible (Exclude other servers)
+
+Repeat for dev-1 and test-1 
+
+Sudo -I ( To show the hostnames of the server 
+
+Passwd root (For all nodes)
+
+Vim /etc/ssh/ssh_config  (we need to modify on all nodes )
+
+:38 (Remove the # to uncomment permit Login)
+:60 (password Authentication change to yes)
+
+:wq 
+
+Systemctl restart sshd (To restart)
+
+Systemctl status sshd (To check sshd status )
+
+Go out of multi-execution mode 
+
+Go to ansible main node 
