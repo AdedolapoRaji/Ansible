@@ -1,0 +1,105 @@
+TOPIC 1
+
+TEST TO INSTALL APACHE, MYSQL AND PYTHON
+
+L--LINUX
+A--APACHE
+M-MYSQL
+P--PYHTON
+
+
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: install apache
+      yum:
+        name: httpd
+        state: present
+
+    - name: install MariaDB Server
+      yum:
+        name: mariadb105-server  # Specific version for AL2023
+        state: present
+        update_cache: yes
+
+    - name: install Python 3
+      yum:
+        name: python3
+        state: present
+
+
+TO UNINSTALL
+
+ sed -i 's/present/absent/g' playbook1.yml
+ sed -i 's/install/uninstall/g' playbook1.yml
+ ansible-playbook playbook1.yml -b
+
+
+
+TOPIC 2
+
+DEPLOY AN APPLICATIION USING ANSIBLE TO AN APACHE WEB SERVER 
+
+I FORKED THE REPO BELOW FROM RAHAM 
+https://github.com/CleverProgrammers/pwj-netflix-clone (that's where the code is)
+
+
+MY GIT REPOSITORY 
+
+https://github.com/AdedolapoRaji/pwj-netflix-clone.git
+
+IN RAHAM ALL SETUP, THERE IS "netflix.yml" playbook which didn't work for me.
+Mine actually worked, the corrected version below
+
+
+
+MY PLAYBOOK BELOW
+
+Vim neflix.yml
+
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: install apache and git
+      yum:
+        name:
+          - httpd
+          - git
+        state: present
+
+    - name: start apache server
+      service:
+        name: httpd
+        state: started
+        enabled: yes
+
+    - name: ensure web root is clean for git
+      file:
+        path: /var/www/html
+        state: absent
+
+    - name: create fresh web root
+      file:
+        path: /var/www/html
+        state: directory
+        mode: '0755'
+
+    - name: git checkout netflix clone
+      git:
+        repo: "https://github.com/AdedolapoRaji/pwj-netflix-clone.git"
+        dest: "/var/www/html"
+        force: yes
+
+
+
+Ansible-playbook neflix.yml
+
+
+
+
+Paste public ip in browser to see the application
+
+
+
