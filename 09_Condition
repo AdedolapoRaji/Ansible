@@ -1,0 +1,56 @@
+WHEN CONDITION
+
+TO INSTALL GIT ONLY IF THE SERVER IS REDHAT
+
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: To install git on RedHat
+      yum:
+        name: git        # Just the package name here
+        state: present
+      when: ansible_os_family == "RedHat"
+
+    - name: To install git on Ubuntu
+      apt:               # IMPORTANT: Ubuntu uses 'apt', not 'yum'
+        name: git
+        state: present
+      when: ansible_os_family == "Debian"
+
+
+:wq to save 
+
+Ansible-playbook playbook1.yml
+
+
+
+
+
+
+
+Ubuntu was skipped because the current OS is Redhat (amazon linux)
+
+
+
+TO UNINSTALL
+
+sed -i 's/present/absent/g' playbook1.yml
+
+ cat playbook1.yml
+
+sed -i 's/git/git*/g' playbook1.yml
+
+ansible-playbook playbook1.yml
+
+ ansible all -a "git --version"
+
+
+
+TO CHECK THE TYPE OF OS FAMILY CURRENTLY RUNNING 
+
+ansible all -m setup | grep -i family
+
+
+
+
