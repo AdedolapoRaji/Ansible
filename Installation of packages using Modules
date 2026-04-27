@@ -1,0 +1,61 @@
+TO INSTALL PACKAGE (YUM)
+
+ansible all -m yum -a "name=git state=present" -b
+
+ansible all -m yum -a "name=docker state=present" -b
+
+ansible all -m yum -a "name=httpd state=present" -b
+
+ansible all -a "git --version" -b   (To check version)
+
+
+TO UPDATE
+
+ansible all -m yum -a "name=git state=latest" -b
+
+
+
+SERVICE MODULE  (service)
+
+TO START THE SERVICE
+
+ansible all -m service -a "name=httpd state=started" -b
+
+ansible all -a "systemctl status httpd" -b
+
+ansible all -m service -a "name=httpd state=stopped" -b
+
+
+
+
+USER MODULE
+
+ansible all -m user -a "name=Suraj state=present" -b  (To create a user)
+
+ansible all -m user -a "name=Suraj state=absent" -b   (To delete)
+
+ansible all -a "cat /etc/passwd" -b  (To see the list of users)
+
+
+
+COPY MODULE 
+
+Vim app.yml
+
+name: abc
+webserver: 192.162.100.1:80
+appserver: 192.1.100.1:8080
+dbserver: 192.16.100.1:5432
+lburl:www.abc.com
+
+Save
+
+
+TO COPY THE FILE FROM ANSIBLE SERVER TO OTHER NODES 
+
+
+ansible all -m copy -a "src=app.yml dest=/root" -b
+
+ansible all -a "ls /root" -b   (TO VIEW THE CONTENT OF THE FILE)
+
+ansible all -m file -a "path=/root/app.yml state=absent" -b  (To remove the file)
