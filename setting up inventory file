@@ -1,0 +1,51 @@
+	3. 
+
+
+Phase 2: SSH Key Management
+Since your managed nodes (EC2 instances) require an RSA key for entry, we moved your Windows .pem file onto the Linux control node.
+
+	1. Create Key File: * vim ~/devops-key.pem
+
+paste the .pem file and save 
+
+	2. Secure the Key: * chmod 400 ~/devops-key.pem
+
+		○ Note: This is a critical security step. SSH will reject keys that are "world-readable."
+
+Phase 3: Global Configuration (ansible.cfg)
+By default, Ansible asks for manual confirmation for every new server (SSH fingerprint). We automated this.
+
+	1. Path: vim /etc/ansible/ansible.cfg
+	2. The Fix: ```ini
+
+[defaults]
+host_key_checking = False
+
+* This prevents the "Are you sure you want to continue connecting?" prompt.
+
+Phase 4: Inventory Management (hosts)
+We defined your servers and assigned them specific variables so you don't have to type them in every command.
+
+	1. Path: sudo vim /etc/ansible/hosts
+	2. Configuration:
+Ini, TOML
+
+[dev]
+dev-1 ansible_host=172.31.25.125
+
+[test]
+test-1 ansible_host=172.31.28.229
+
+[all:vars]
+ansible_user=ec2-user
+ansible_ssh_private_key_file=~/devops-key.pem
+
+		○ [all:vars]: This section applies the username (ec2-user) and the path to your key to every server in the file.
+
+Phase 5: Verification
+
+We used the Ad-Hoc ping module to verify the connection.
+
+	• Command: ansible all -m ping
+
+The Result: The "ping": "pong" response confirms that Python is installed on the target nodes and Ansible has full SSH access.
