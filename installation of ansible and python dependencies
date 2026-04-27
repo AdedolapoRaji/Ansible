@@ -1,0 +1,48 @@
+2
+
+Step 1: Create the script file
+Open your terminal and use vim to create the file.
+Bash
+
+vim install-ansible.sh
+
+Step 2: Add the script content
+Once inside Vim, press i to enter Insert mode. Copy and paste the following block:
+Bash
+
+#!/bin/bash
+echo "Starting Ansible installation..."
+# 1. Update and install Python/Pip based on OS
+if [ -f /etc/debian_version ]; then
+    echo "Detected Debian/Ubuntu system..."
+    sudo apt update && sudo apt install -y python3-pip python3-venv
+elif [ -f /etc/redhat-release ] || [ -f /etc/os-release ]; then
+    echo "Detected RHEL/Fedora/AL2023 system..."
+    sudo dnf install -y python3-pip
+fi
+# 2. Upgrade pip to ensure compatibility
+echo "Upgrading pip..."
+python3 -m pip install --upgrade pip --user
+# 3. Install Ansible
+echo "Installing Ansible via pip..."
+python3 -m pip install ansible --user
+# 4. Update PATH so 'ansible' command is recognized
+if [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
+    echo 'export PATH=$PATH:$HOME/.local/bin' >> ~/.bashrc
+    export PATH=$PATH:$HOME/.local/bin
+    echo "Added ~/.local/bin to PATH."
+fi
+echo "Installation complete!"
+
+ansible --version
+
+
+Step 3: Save and Exit
+	1. Press the Esc key.
+	2. Type :wq and press Enter.
+Step 4: Set Permissions and Execute
+Now, make the file executable and run it using the ./ syntax we discussed.
+Bash
+
+chmod +x install-ansible.sh
+./install-ansible.sh
