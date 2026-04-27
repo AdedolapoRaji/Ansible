@@ -1,0 +1,357 @@
+TASK
+
+To install httpd 
+To create user
+To start the service 
+
+
+Below is a playbook to execute the task
+
+vim playbook1.yml
+
+
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: install httpd
+      yum:
+        name: httpd
+        state: present
+
+    - name: start httpd
+      service:
+        name: httpd
+        state: started
+
+    - name: create user
+      user:
+        name: Ahmed
+        state: present
+~
+
+
+
+:wq to save
+
+ ansible-playbook playbook.yml
+
+ansible all -a "httpd -version" -b
+
+ansible all -a "systemctl status httpd" -b
+
+
+NEXT task 
+
+Playbookk to uninstall everything
+
+
+
+
+Playbook to uninstall the packages  and delete the user 
+
+---
+- hosts: all
+  become: yes
+  tasks:
+
+    - name: stop httpd
+      service:
+        name: httpd
+        state: stopped
+
+    - name: uninstall httpd
+      yum:
+        name: httpd
+        state: absent
+
+
+    - name: delete user
+      user:
+        name: Ahmed
+        state: absent
+~
+~
+~
+
+
+
+							Topic 2
+
+TAGS : used to execute or skip a specific task 
+
+TASK:  To exclude tag a,b and d and only excute C
+
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: To install docker
+      yum:
+        name: docker
+        state: present
+      tags:
+        - a
+
+    - name: To start docker
+      service:
+        name: docker
+        state: started
+      tags:
+        - b
+
+    - name: To install maven
+      yum:
+        name: maven
+        state: present
+      tags:
+        - c
+
+    - name: To create a user
+      user:
+        name: Akeem
+        state: present
+      tags:
+        - d
+
+
+ ansible-playbook playbook1.yml --tags c
+
+
+
+							
+Topic 3
+
+SKIP TAGS 
+
+TASK: To execute a,b and d and skip only c
+
+ ansible-playbook playbook1.yml --skip-tags c
+
+
+
+To uninstall all package
+
+-
+- hosts: all
+  become: yes
+  tasks:
+    - name: To uninstall docker
+      yum:
+        name: docker
+        state: absent
+      tags:
+        - a
+
+    - name: To stop docker
+      service:
+        name: docker
+        state: stopped
+      tags:
+        - b
+
+    - name: To uninstall maven
+      yum:
+        name: maven
+        state: absent
+      tags:
+        - c
+
+    - name: To delete a user
+      user:
+        name: Akeem
+        state: absent
+      tags:
+        - d
+~
+							
+							Topic 4
+
+SHELL VS COMMAND VS RAW
+
+To install docker and maven 
+
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: To install docker
+      raw: yum install docker -y -b
+      tags:
+        - a
+
+
+    - name: To install maven
+      raw: yum install maven -y -b
+      tags:
+        - c
+
+
+
+
+
+TO UNINSTALL USING SED 
+
+sed -i 's/yum install/yum remove/g' playbook1.yml
+
+cat playbook.yml  (To confirm if install has changed to remove)
+
+ansible-playbook playbook1.yml
+							
+							Topic 5
+
+VARIABLE
+
+STATIC VARIABLE: defined inside playbook
+
+
+SYNTAX TO INSTALL DOCKER AND MAVEN
+
+---
+- hosts: all
+  become: yes
+  vars:
+    a: docker
+    b: maven
+  tasks:
+    - name: To install docker
+      yum:
+        name: "{{ a }}"
+        state: present
+      tags:
+        - a
+
+    - name: To install maven
+      yum:
+        name: "{{ b }}"
+        state: present
+      tags:
+        - b
+
+
+
+
+
+							Topic 6
+
+DYNAMIC VARIABLE
+
+DEFINE "TREE"OUTSIDE THE PLAYBOOK 
+
+---
+- hosts: all
+  become: yes
+  vars:
+    a : docker
+    b : maven
+  tasks:
+    - name: To install docker
+      yum:
+        name: "{{ a }}"
+        state: present
+      tags:
+        - a
+
+
+    - name: To install maven
+      yum:
+        name: "{{ b }}"
+        state: present
+      tags:
+        - b
+
+
+    - name: To install tree
+      yum:
+        name: "{{ c }}"
+        state: present
+      tags:
+        - c
+
+
+
+To execute
+
+ansible-playbook playbook1.yml --extra-vars "c=tree"
+
+
+To uninstall package using sed
+
+sed -i 's/present/absent/g' playbook1.yml
+
+Cat playbook1.yml 
+
+Then execute (To remove the tree"(variable declared outside) )
+
+ansible-playbook playbook1.yml --extra-vars "c=tree"
+
+
+
+							Topic 7
+
+LOOPS : To install multiple packages at once 
+
+TASK: Playbook to install git, maven, docker, httpd, tree and to uninstall 
+
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: To install packages
+      yum:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - git
+        - maven
+        - docker
+        - httpd
+        - tree
+
+
+To uninstall
+
+sed -i 's/present/absent/g' playbook1.yml
+
+sed -i 's/git/git*/g' playbook1.yml   (to remove git and dependencies)
+
+Cat playbook1.yml
+
+ansible-playbook playbook1.yml
+
+
+
+LOOPS TO CREATE MULTIPLE USERS 
+
+
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: To install packages
+      user:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - mary
+        - shittu
+        - jinad
+        - sodiq
+        - kareem
+
+
+
+
+To view users 
+
+ansible all -a "cat /etc/passwd" -b
+
+To remove all users 
+
+sed -i 's/present/absent/g' playbook1.yml
+
+Cat playbook1.yml
+
+ansible-playbook playbook1.yml
+
+
