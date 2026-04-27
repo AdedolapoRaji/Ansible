@@ -1,0 +1,22 @@
+Troubleshooting 
+
+Httpd not starting when I ran playbook, after correcting the playbook we verify the following 
+
+ansible all -a "pkill -9 httpd" -b
+
+ansible all -a "netstat -tuln" -b | grep ":80"
+
+
+
+Unable to launch app via browser with public ip 
+
+solution
+
+Add port 80 to security group 
+
+Verify 
+
+curl -I http://51.20.116.172
+
+
+
