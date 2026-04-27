@@ -1,0 +1,33 @@
+To see the list of nodes connected to ansible (The 3 commands works fine)
+
+ansible all --list-hosts
+
+ ansible-inventory --graph --vars
+
+ansible-inventory --list --yaml
+
+To check if they are actually "connected"
+
+ansible all -m ping
+
+
+
+TO CHECK CPU AND MEMORY ON ALL NODES 
+
+ ansible all -m setup | grep -i mem
+
+ ansible all -m setup | grep -i cpus
+
+TO CHECK OS TYPE 
+
+ansible all -m setup | grep -i family
+
+
+TO SCALE UP RAM/CPU FOR A NODE 
+
+Go to aws
+Stop the machine
+Naviagte > instance settings >  change instance type 
+Start instance 
+
+Then you can run the command above to check 
